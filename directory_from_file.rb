@@ -91,12 +91,14 @@ def print_menu
 end
 
 def interactive_menu
-
   loop do
-    selection = ""
       print_menu
-    # read the input and save it into a variable
-    selection = gets.chomp
+    process(gets.chomp)
+  end
+end
+
+
+def process(selection)
     # do what the user has asked
     case selection
       when "1"
@@ -116,7 +118,6 @@ def interactive_menu
       else
         puts "I don't know what you mean, try again"
     end
-  end
 end
 
 def show_students
@@ -146,6 +147,6 @@ def try_load_students
   end
 end
 
-#try_load_students
+try_load_students
 
 interactive_menu
