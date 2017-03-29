@@ -37,22 +37,22 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   coh = -1
-  name = gets.strip
+  name = STDIN.gets.strip
 
   # while the name is not empty, repeat
     while !name.empty? do
     puts "Which cohort? (enter 1-12 for month, otherwise \'unknown\' will be recorded)"
-      coh = gets.strip
+      coh = STDIN.gets.strip
       if coh.to_i <0 || coh.to_i > 12
         puts "That cohort was not understood, will be logged as unknown"
         coh = 0
       end
       puts "Do they have hobbies?"
-      hobbies = gets.strip
+      hobbies = STDIN.gets.strip
       puts "Where were they born?"
-      birth = gets.strip
+      birth = STDIN.gets.strip
       puts "And how tall are they?"
-      tall = gets.strip
+      tall = STDIN.gets.strip
           # add the hash to the array
       @students << {name: name, cohort: $cohorts[coh.to_i], hobby: hobbies, pob: birth, height: tall}
         if @students.count > 1
@@ -61,7 +61,7 @@ def input_students
           puts "We have our first student. Would you like to add another?"
         end
 
-    name = gets.strip
+    name = STDIN.gets.strip
 
     end
   # return the array
@@ -93,13 +93,13 @@ end
 def interactive_menu
   loop do
       print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
 
 def process(selection)
-    # do what the user has asked
+  print selection
     case selection
       when "1"
         @students = input_students
@@ -128,8 +128,8 @@ end
 
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobby, pob, height = line.chomp.split(',')
+  file.readlines.each do |entry|
+    name, cohort, hobby, pob, height = entry.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
   end
   file.close
