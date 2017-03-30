@@ -11,12 +11,12 @@ end
 def print_list_of_students
   $cohorts.each do |x|
     if (@students.count{|c| c[:cohort] == x}) >0
-    puts "#{x.to_s.capitalize} cohort\:"
-    @students.each do |student,ind|
-      if student[:cohort] == x
-        puts "#{student[:name]} (from #{student[:pob]}, likes #{student[:hobby]})"
+      puts "#{x.to_s.capitalize} cohort\:"
+      @students.each do |student,ind|
+        if student[:cohort] == x
+          puts "#{student[:name]} (from #{student[:pob]}, likes #{student[:hobby]})"
+        end
       end
-    end
    end
   end
 end
@@ -47,14 +47,14 @@ def input_students
         puts "That cohort was not understood, will be logged as unknown"
         coh = 0
       end
+      cohort = $cohorts[coh.to_i]
       puts "Do they have hobbies?"
-      hobbies = STDIN.gets.strip
+      hobby = STDIN.gets.strip
       puts "Where were they born?"
-      birth = STDIN.gets.strip
+      pob = STDIN.gets.strip
       puts "And how tall are they?"
-      tall = STDIN.gets.strip
-          # add the hash to the array
-      @students << {name: name, cohort: $cohorts[coh.to_i], hobby: hobbies, pob: birth, height: tall}
+      height = STDIN.gets.strip
+      add_student(name,cohort,hobby,pob,height)
         if @students.count > 1
           puts "Now we have #{@students.count} students. Would you like to add another name?"
         else
@@ -62,19 +62,20 @@ def input_students
         end
 
     name = STDIN.gets.strip
-
     end
   # return the array
   @students
 end
 
+def add_student(name,cohort,hobby,pob,height)
+  @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
+end
+
 def save_students
-  file = File.open(filename, "w")
+  file = File.open(@filename, "w")
   # iterate over the array
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    file.puts = [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]].join(",")
   end
   file.close
 end
@@ -97,9 +98,7 @@ def interactive_menu
   end
 end
 
-
 def process(selection)
-  print selection
     case selection
       when "1"
         @students = input_students
@@ -111,9 +110,12 @@ def process(selection)
         end
       when "3"
         save_students
+        puts "List saved to CSV"
       when "4"
         load_students
+        puts "List loaded from CSV"
       when "9"
+        puts "Thank you, goodbye."
         exit
       else
         puts "I don't know what you mean, try again"
@@ -126,23 +128,23 @@ def show_students
   print_footer(@students)
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+def load_students
+  file = File.open(@filename, "r")
   file.readlines.each do |entry|
     name, cohort, hobby, pob, height = entry.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
+    add_student(name,cohort,hobby,pob,height)
   end
   file.close
 end
 
 def try_load_students
-  filename = ARGV.first
-  return if filename.nil?
-  if File.exists?(filename)
-    load_students(filename)
-     puts "Loaded #{@students.count} from #{filename}"
+  @filename = ARGV.first
+  @filename = "students.csv" if @filename.nil?
+  if File.exists?(@filename)
+    load_students
+     puts "Loaded #{@students.count} from #{@filename}"
   else
-    puts "Sorry, #{filename} doesn't exist."
+    puts "Sorry, #{@filename} doesn't exist."
     exit
   end
 end

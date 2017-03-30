@@ -47,14 +47,14 @@ def input_students
         puts "That cohort was not understood, will be logged as unknown"
         coh = 0
       end
+      cohort = $cohorts[coh.to_i]
       puts "Do they have hobbies?"
-      hobbies = STDIN.gets.strip
+      hobby = STDIN.gets.strip
       puts "Where were they born?"
-      birth = STDIN.gets.strip
+      pob = STDIN.gets.strip
       puts "And how tall are they?"
-      tall = STDIN.gets.strip
-          # add the hash to the array
-      @students << {name: name, cohort: $cohorts[coh.to_i], hobby: hobbies, pob: birth, height: tall}
+      height = STDIN.gets.strip
+      add_student(name,cohort,hobby,pob,height)
         if @students.count > 1
           puts "Now we have #{@students.count} students. Would you like to add another name?"
         else
@@ -66,6 +66,10 @@ def input_students
     end
   # return the array
   @students
+end
+
+def add_student(name,cohort,hobby,pob,height)
+  @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
 end
 
 def save_students
@@ -96,7 +100,6 @@ def interactive_menu
     process(STDIN.gets.chomp)
   end
 end
-
 
 def process(selection)
   print selection
@@ -130,7 +133,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |entry|
     name, cohort, hobby, pob, height = entry.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
+    add_student
   end
   file.close
 end
