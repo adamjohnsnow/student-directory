@@ -68,16 +68,15 @@ def input_students
 end
 
 def add_student(name,cohort,hobby,pob,height)
-  @students << {name: name, cohort: cohort.to_sym, hobby: hobby, pob: pob, height: height}
+  @students << {name: name, cohort: cohort, hobby: hobby, pob: pob, height: height}
 end
 
 def save_students
-  file = File.open(@filename, "w")
   # iterate over the array
   @students.each do |student|
-    file.puts [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]].join(",")
+    File.open(@filename, "w").puts [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]].join(",")
   end
-  file.close
+
 end
 
 def print_menu
@@ -109,9 +108,13 @@ def process(selection)
             puts "Sorry, we don\'t currently have any students..."
         end
       when "3"
+        puts "Please enter filename"
+        @filename = gets.chomp
         save_students
         puts "List saved to CSV"
       when "4"
+        puts "Please enter filename"
+        @filename = gets.chomp
         load_students
         puts "List loaded from CSV"
       when "9"
@@ -129,12 +132,10 @@ def show_students
 end
 
 def load_students
-  file = File.open(@filename, "r")
-  file.readlines.each do |entry|
-    name, cohort, hobby, pob, height = entry.chomp.split(',')
-    add_student(name,cohort.to_sym,hobby,pob,height)
-  end
-  file.close
+File.open(@filename, "r").readlines.each do |entry|
+name,cohort,hobby,pob,height  = entry.chomp.split(',')
+  add_student(name,cohort.to_sym,hobby,pob,height)
+end
 end
 
 def try_load_students

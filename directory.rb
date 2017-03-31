@@ -69,12 +69,10 @@ def input_students
 end
 
 def save_students
-  file = File.open(filename, "w")
-  # iterate over the array
+  file = File.open("students.csv", "w")
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    student_data = [student[:name], student[:cohort], hobby[:hobby], pob[:pob], height[:height]]
+    file.puts student_data.join(",")
   end
   file.close
 end

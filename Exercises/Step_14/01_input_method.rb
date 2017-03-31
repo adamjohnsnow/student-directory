@@ -73,7 +73,7 @@ def add_student(name,cohort,hobby,pob,height)
 end
 
 def save_students
-  file = File.open(filename, "w")
+  file = File.open("students.csv", "w")
   # iterate over the array
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]]
@@ -102,7 +102,7 @@ def interactive_menu
 end
 
 def process(selection)
-  print selection
+
     case selection
       when "1"
         @students = input_students
@@ -133,7 +133,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |entry|
     name, cohort, hobby, pob, height = entry.chomp.split(',')
-    add_student
+    add_student(name, cohort.to_sym, hobby, pob, height)
   end
   file.close
 end

@@ -75,7 +75,7 @@ def save_students
   file = File.open(@filename, "w")
   # iterate over the array
   @students.each do |student|
-    file.puts [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]].join(",")
+    file.puts  [student[:name], student[:cohort], student[:hobby], student[:pob], student[:height]].join(",")
   end
   file.close
 end
@@ -109,9 +109,13 @@ def process(selection)
             puts "Sorry, we don\'t currently have any students..."
         end
       when "3"
+        puts "Please enter filename"
+        @filename = gets.chomp
         save_students
         puts "List saved to CSV"
       when "4"
+        puts "Please enter filename"
+        @filename = gets.chomp
         load_students
         puts "List loaded from CSV"
       when "9"
